@@ -9,6 +9,7 @@ pre-commit:
       run: npm run test
       include: "./src/**/*.{js,jsx,ts,tsx}"
       exclude: "node_modules"
+      fail_text: "❌ Hay tests fallidos. Revisa la salida e intenta solucionarlo."
 
 # EXAMPLE USAGE:
 #
