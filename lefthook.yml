@@ -6,7 +6,7 @@ pre-commit:
       include: "./src/**/*.{js,jsx,ts,tsx}"
       exclude: "node_modules"
     tests:
-      run: npm run vitest
+      run: npm run test
       include: "./src/**/*.{js,jsx,ts,tsx}"
       exclude: "node_modules"
 

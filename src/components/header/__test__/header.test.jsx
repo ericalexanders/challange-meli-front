@@ -1,42 +1,58 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { BrowserRouter } from "react-router-dom";
 import Header from "../Header";
 
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 describe("Header Component", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    render(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>,
+    );
+  });
+
   it("renders the logo", () => {
-    render(<Header />);
     const logo = screen.getByRole("img", { name: /mercadolibre logo/i });
     expect(logo).toBeInTheDocument();
   });
 
   it("renders the input field", () => {
-    render(<Header />);
     const input = screen.getByPlaceholderText(/buscar.../i);
     expect(input).toBeInTheDocument();
   });
 
   it("allows the user to type in the input", async () => {
-    render(<Header />);
     const input = screen.getByPlaceholderText(/buscar.../i);
     await userEvent.type(input, "Celulares");
     expect(input).toHaveValue("Celulares");
   });
 
   it("triggers search when clicking the search icon", async () => {
-    const handleSearch = vi.fn(); // Mock de la función
-
-    render(<Header />);
-
-    // Buscar el input y escribir un valor
     const input = screen.getByPlaceholderText(/buscar.../i);
     await userEvent.type(input, "Laptops");
 
-    // Buscar el icono de búsqueda y simular el click
     const searchIcon = screen.getByTestId("search-icon");
-    searchIcon.addEventListener("click", handleSearch);
     await userEvent.click(searchIcon);
 
-    expect(handleSearch).toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith("/items?search=Laptops");
+  });
+
+  it("does not trigger search when clicking inside the input field", async () => {
+    const input = screen.getByPlaceholderText(/buscar.../i);
+    await userEvent.click(input);
+
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
