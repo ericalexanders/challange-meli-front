@@ -7,20 +7,24 @@ export default function Items() {
   const [searchParams] = useSearchParams();
   const searchQuery = Object.fromEntries(searchParams.entries());
 
-  const { data, isLoading, error } = useGetItems(searchQuery);
+  const { data, isLoading } = useGetItems(searchQuery);
+
+  const formatPrice = (amount: number) => {
+    return new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 }).format(amount);
+  };
 
   return (
     <section className={style.container}>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p className={style.text_center}>Loading...</p>}
       {!isLoading &&
         data?.items.map((item) => (
           <div key={item.id} className={style.card}>
             <img src={item.picture} alt={item.title} />
             <div className={style.cardContent}>
-              <h3>{item.title}</h3>
               <p>
-                {item.price.currency} {item.price.amount}
+                {item.price.currency} $ {formatPrice(item.price.amount)},{item.price.decimals}
               </p>
+              <h3>{item.title}</h3>
             </div>
           </div>
         ))}

@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, "src");
 const components = path.resolve(root, "src/components");
 const pages = path.resolve(root, "src/pages");
 const assets = path.resolve(root, "src/assets");
+const services = path.resolve(root, "src/services");
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,6 +23,7 @@ export default defineConfig({
       "@components": components,
       "@pages": pages,
       "@assets": assets,
+      "@services": services,
     },
   },
 });

@@ -14,9 +14,13 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider
         router={router}
-        future={{
-          v7_startTransition: true,
-        }}
+        future={
+          {
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          } as any
+        }
       />
     </QueryClientProvider>
   </StrictMode>,

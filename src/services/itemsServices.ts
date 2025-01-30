@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+import type { DataResponse } from "@/types/result";
 
 const API_URL = "http://localhost:3000/api";
 const Axios = axios.create({
@@ -26,7 +27,7 @@ const getItems = async (query: Partial<SearchQuery>) => {
 // HOOKS WITH REACT QUERY
 // ----------------------------------------------- //
 
-export const useGetItems = (query: Partial<SearchQuery>) => {
+export const useGetItems = (query: Partial<SearchQuery>): UseQueryResult<DataResponse> => {
   return useQuery({
     queryKey: ["items", query],
     queryFn: () => getItems(query),
