@@ -9,7 +9,7 @@ export default function Header() {
   const handleSearch = () => {
     const query = (inputRef.current as unknown as HTMLInputElement)?.value.trim();
     if (query) {
-      navigate(`/items?search=${encodeURIComponent(query)}`);
+      navigate(`/items?search=${encodeURIComponent(query)}&limit=4`);
     }
   };
 

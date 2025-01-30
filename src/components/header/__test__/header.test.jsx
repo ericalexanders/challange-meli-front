@@ -46,7 +46,7 @@ describe("Header Component", () => {
     const searchIcon = screen.getByTestId("search-icon");
     await userEvent.click(searchIcon);
 
-    expect(mockNavigate).toHaveBeenCalledWith("/items?search=Laptops");
+    expect(mockNavigate).toHaveBeenCalledWith("/items?search=Laptops&limit=4");
   });
 
   it("does not trigger search when clicking inside the input field", async () => {
