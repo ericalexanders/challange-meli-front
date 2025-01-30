@@ -13,7 +13,7 @@ export default function Items() {
     <section className={style.container}>
       {isLoading && <p>Loading...</p>}
       {!isLoading &&
-        data?.items.map((item: any) => (
+        data?.items.map((item) => (
           <div key={item.id} className={style.card}>
             <img src={item.picture} alt={item.title} />
             <div className={style.cardContent}>
