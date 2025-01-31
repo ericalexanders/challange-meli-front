@@ -1,4 +1,4 @@
-# Mercado Libre Challenge
+# Mercado Libre Challange (FRONT)
 
 ### React + TypeScript + Vite + Tanstact/react-query + Biome + Vitest + Testing-library
 
