@@ -8,20 +8,22 @@ Asi también vitest para los test unitarios.
 Copmandos:
 
 Modo desarrollo: `npm run dev`
-Correr test: `npm run test`
+
+Correr tests: `npm run test`
+
 Coverage: `npm run coverage`
+
 Linter: `npm run biome:lint`
-Formter(prettier): `biome:format` 
 
->Cabe mencionar que se configuró un setting local cd vsCode para que verifique Biome en tiempo real.
+Formater(prettier): `biome:format` 
 
-> Tambien se configuró lefthook para poder ejecutar tareas antes de un commit en git (Corroborando linter y tests).
+>Cabe mencionar que se configuró un setting local de vscode para que verifique Biome en tiempo real (carpeta .vscode)
+
+> También se configuró lefthook para poder ejecutar tareas antes de un commit en git (Corroborando linter y tests).
 
 ## Consideraciones de performance y optimización
 
-El uso de un ref en cuanta de un estado par al balor del input de busqueda, para evitar renderizados inecesarios.
-
-- Configure the top-level `parserOptions` property like this:
+El uso de un ref en cuanta de un estado para el valor del input de búsqueda, para evitar renderizados innecesarios (Uncontrolled Components).
 
 ```js
   const inputRef = useRef(null);
@@ -47,7 +49,7 @@ El uso de un ref en cuanta de un estado par al balor del input de busqueda, para
   )
 ```
 
-- A su vez se usa react-query para manejar los estados del servidor (optimizar cache y refetch en caso de error). Se crea la funcion que realiza el fetch y se la usa en un hook.
+- A su vez se usa react-query para manejar los requests y estados del servidor (optimiza cache y refetch en caso de error, entre otras cosas). Se crea la función que realiza el fetch y se la usa en un hook. Ejemplo:
 
 ```js
 // services/itemServices.ts
