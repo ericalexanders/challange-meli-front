@@ -1,50 +1,74 @@
-# React + TypeScript + Vite
+# Mercado Libre Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### React + TypeScript + Vite + Tanstact/react-query + Biome + Vitest + Testing-library
 
-Currently, two official plugins are available:
+Se usa Biomejs para el linter y el formateo del código.
+Asi también vitest para los test unitarios.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Copmandos:
 
-## Expanding the ESLint configuration
+Modo desarrollo: `npm run dev`
+Correr test: `npm run test`
+Coverage: `npm run coverage`
+Linter: `npm run biome:lint`
+Formter(prettier): `biome:format` 
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+>Cabe mencionar que se configuró un setting local cd vsCode para que verifique Biome en tiempo real.
+
+> Tambien se configuró lefthook para poder ejecutar tareas antes de un commit en git (Corroborando linter y tests).
+
+## Consideraciones de performance y optimización
+
+El uso de un ref en cuanta de un estado par al balor del input de busqueda, para evitar renderizados inecesarios.
 
 - Configure the top-level `parserOptions` property like this:
 
 ```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+  const inputRef = useRef(null);
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    const query = (inputRef.current as unknown as HTMLInputElement)?.value.trim();
+    if (query) {
+      navigate(`/items?search=${encodeURIComponent(query)}&limit=4`);
+    }
+  };
+
+  return (
+    ...
+    <input
+      ref={inputRef}
+      type="text"
+      placeholder="Buscar..."
+      onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+      onClick={(e) => e.stopPropagation()}
+      aria-label="Buscar productos"
+    />
+  )
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- A su vez se usa react-query para manejar los estados del servidor (optimizar cache y refetch en caso de error). Se crea la funcion que realiza el fetch y se la usa en un hook.
 
 ```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+// services/itemServices.ts
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+// mas codigo...
+const getItems = async (query: Partial<SearchQuery>) => {
+  const { search, ...rest } = query;
+  const response = await Axios.get("/items", {
+    params: {
+      q: search,
+      ...rest,
+    },
+  });
+  return response.data;
+};
+
+export const useGetItems = (searchQuery: Partial<SearchQuery>): UseQueryResult<DataResponse> => {
+  return useQuery({
+    queryKey: ["items", searchQuery],
+    queryFn: () => getItems(searchQuery),
+    enabled: !!searchQuery.search,
+  });
+};
 ```

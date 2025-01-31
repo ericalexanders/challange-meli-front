@@ -16,7 +16,13 @@ export default function Header() {
   return (
     <header className={style.nav_header}>
       <div className={style.container}>
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            const inputElement = inputRef.current as unknown as HTMLInputElement;
+            inputElement.value = "";
+          }}
+        >
           <div className={style.img_logo} role="img" aria-label="MercadoLibre Logo" />
         </Link>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}

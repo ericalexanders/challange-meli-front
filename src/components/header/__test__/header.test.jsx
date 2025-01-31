@@ -5,8 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import Header from "../Header";
 
 const mockNavigate = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
+vi.mock("react-router-dom", async (importOriginal) => {
+  const actual = await importOriginal();
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -59,5 +59,15 @@ describe("Header Component", () => {
     await userEvent.click(input);
 
     expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it("clears the input when clicking the logo", async () => {
+    const input = screen.getByPlaceholderText(/buscar.../i);
+    await userEvent.type(input, "Consolas");
+
+    const logo = screen.getByRole("img", { name: /mercadolibre logo/i });
+    await userEvent.click(logo);
+
+    expect(input).toHaveValue("");
   });
 });

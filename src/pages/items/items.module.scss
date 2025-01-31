@@ -30,6 +30,13 @@
     border-radius: 0 0 4px 4px;
     border-bottom: none;
   }
+  picture {
+    width: 220px;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
 }
 
 .cardContent {
